@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="TrackableEntities.Common.Core" Version="1.1.0" />
+    <PackageReference Include="URF.Core.Abstractions.Trackable" Version="1.1.0" />
+    <PackageReference Include="URF.Core.Services" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Abstractions.Services.DomainModel\Abstractions.Services.DomainModel.csproj" />
+  </ItemGroup>
+
+</Project>
