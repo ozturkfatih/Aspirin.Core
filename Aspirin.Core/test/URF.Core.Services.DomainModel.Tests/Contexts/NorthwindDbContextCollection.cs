@@ -1,7 +1,6 @@
-﻿
-using Xunit;
+﻿using Xunit;
 
-namespace Test.DomainModelService.Contexts
+namespace URF.Core.Services.DomainModel.Tests.Contexts
 {
     [CollectionDefinition(nameof(NorthwindDbContext))]
     public class NorthwindDbContextCollection : ICollectionFixture<NorthwindDbContextFixture>

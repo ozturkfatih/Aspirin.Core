@@ -4,7 +4,7 @@ using System.Data.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace Test.DomainModelService.Contexts
+namespace URF.Core.Services.DomainModel.Tests.Contexts
 {
     public class NorthwindDbContextFixture : IDisposable
     {

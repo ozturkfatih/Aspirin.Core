@@ -1,9 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using URF.Core.EF.Trackable;
 
-namespace Test.DomainModelService.Models
+namespace URF.Core.Services.DomainModel.Tests.Models
 {
-    public class OrderDomainModel
+    public partial class Order : Entity
     {
+        public Order()
+        {
+            OrderDetails = new List<OrderDetail>();   
+        }
+
+        [Key]
         public int OrderId { get; set; }
         public string CustomerId { get; set; }
         public int? EmployeeId { get; set; }
@@ -18,5 +28,10 @@ namespace Test.DomainModelService.Models
         public string ShipRegion { get; set; }
         public string ShipPostalCode { get; set; }
         public string ShipCountry { get; set; }
+
+        [ForeignKey(nameof(CustomerId))]
+        public Customer Customer { get; set; }
+
+        public List<OrderDetail> OrderDetails { get; set; }
     }
 }

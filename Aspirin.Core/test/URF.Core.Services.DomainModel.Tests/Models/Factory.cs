@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Test.DomainModelService.Models
+namespace URF.Core.Services.DomainModel.Tests.Models
 {
     public static class Factory
     {

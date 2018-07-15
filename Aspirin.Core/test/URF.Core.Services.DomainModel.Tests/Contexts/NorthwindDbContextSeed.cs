@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Test.DomainModelService.Models;
+using URF.Core.Services.DomainModel.Tests.Models;
 
-namespace Test.DomainModelService.Contexts
+namespace URF.Core.Services.DomainModel.Tests.Contexts
 {
     internal static class NorthwindDbContextSeed
     {

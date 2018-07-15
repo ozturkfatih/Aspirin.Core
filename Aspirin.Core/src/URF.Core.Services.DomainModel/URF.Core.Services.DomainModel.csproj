@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Abstractions.Services.DomainModel\Abstractions.Services.DomainModel.csproj" />
+    <ProjectReference Include="..\Abstractions.Services.DomainModel\URF.Core.Abstractions.Services.DomainModel.csproj" />
   </ItemGroup>
 
 </Project>
