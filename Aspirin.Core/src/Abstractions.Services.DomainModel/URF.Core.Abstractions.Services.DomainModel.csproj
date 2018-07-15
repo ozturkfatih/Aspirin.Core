@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TrackableEntities.Common.Core" Version="1.1.0" />
     <PackageReference Include="URF.Core.Abstractions.Services" Version="1.1.0" />
   </ItemGroup>
 

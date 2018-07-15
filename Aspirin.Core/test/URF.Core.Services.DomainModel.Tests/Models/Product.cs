@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using URF.Core.EF.Trackable;
 
-namespace Test.DomainModelService.Models
+namespace URF.Core.Services.DomainModel.Tests.Models
 {
     public partial class Product : Entity
     {

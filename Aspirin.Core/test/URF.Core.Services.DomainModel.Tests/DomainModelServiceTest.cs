@@ -1,43 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Test.DomainModelService.Contexts;
-using Test.DomainModelService.Models;
-using Test.DomainModelService.Services;
-using TrackableEntities.Common.Core;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using URF.Core.Abstractions;
-using URF.Core.Abstractions.Trackable;
 using URF.Core.EF;
 using URF.Core.EF.Trackable;
+using URF.Core.Services.DomainModel.Tests.Contexts;
+using URF.Core.Services.DomainModel.Tests.Models;
+using URF.Core.Services.DomainModel.Tests.Services;
 using Xunit;
 
-namespace Test.DomainModelService
+namespace URF.Core.Services.DomainModel.Tests
 {
     [Collection(nameof(NorthwindDbContext))]
     public class DomainModelServiceTest
     {
-        private readonly List<Customer> _customers;
-
-
+        private readonly IMapper _mapper;
         private readonly NorthwindDbContextFixture _fixture;
+
         public DomainModelServiceTest(NorthwindDbContextFixture fixture)
         {
-            _customers = Factory.Customers();
+            var customers = Factory.Customers();
 
             _fixture = fixture;
             _fixture.Initialize(true, () =>
             {
-                _fixture.Context.Customers.AddRange(_customers);
+                _fixture.Context.Customers.AddRange(customers);
                 _fixture.Context.SaveChanges();
             });
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<CustomerDomainModel, Customer>();
+                cfg.CreateMap<Customer, CustomerDomainModel>();
+            });
+            _mapper = config.CreateMapper();
         }
 
         [Fact]
         public async Task CustomersByCompany_Should_Return_Customer()
         {
             // Arrange
-            ITrackableRepository<Customer> customerRepository = new TrackableRepository<Customer>(_fixture.Context);
-            var customerDomainService = new CustomerDomainService(customerRepository);
+            var customerRepository = new TrackableRepository<Customer>(_fixture.Context);
+            var customerDomainService = new CustomerDomainService(customerRepository, _mapper);
             const string company = "Alfreds Futterkiste";
 
             // Act
@@ -49,12 +51,12 @@ namespace Test.DomainModelService
         }
 
         [Fact]
-        public async Task Insert()
+        public async Task Insert_Should_Create_Customer()
         {
             // Arrange
             IUnitOfWork unitOfWork = new UnitOfWork(_fixture.Context);
-            ITrackableRepository<Customer> customerRepository = new TrackableRepository<Customer>(_fixture.Context);
-            var customerService = new CustomerDomainService(customerRepository);
+            var customerRepository = new TrackableRepository<Customer>(_fixture.Context);
+            var customerDomainService = new CustomerDomainService(customerRepository, _mapper);
             const string customerId = "COMP1";
             const string companyName = "Company 1";
 
@@ -65,36 +67,29 @@ namespace Test.DomainModelService
             };
 
             // Act
-            customerService.Insert(customer);
-
-            // Assert
-
-            // Act
+            customerDomainService.Insert(customer);
             var savedChanges = await unitOfWork.SaveChangesAsync();
 
             // Assert
             Assert.Equal(1, savedChanges);
-
-            // Act
             var newCustomer = await customerRepository.FindAsync(customerId);
-
-            // Assert
             Assert.Equal(newCustomer.CustomerId, customerId);
             Assert.Equal(newCustomer.CompanyName, companyName);
         }
 
         [Fact]
-        public async Task Update()
+        public async Task Update_Should_Update_Customer()
         {
             // Arrange
             IUnitOfWork unitOfWork = new UnitOfWork(_fixture.Context);
-            ITrackableRepository<Customer> customerRepository = new TrackableRepository<Customer>(_fixture.Context);
-            var customerService = new CustomerDomainService(customerRepository);
+            var customerRepository = new TrackableRepository<Customer>(_fixture.Context);
+            var customerDomainService = new CustomerDomainService(customerRepository, _mapper);
             const string customerId = "BERGS";
             const string companyName = "Eastern Connection 1";
 
-            var data =await customerRepository.FindAsync(customerId);
-            var customerDomainModel=new CustomerDomainModel
+            var data = await customerRepository.FindAsync(customerId);
+            customerRepository.Detach(data);
+            var customerDomainModel = new CustomerDomainModel
             {
                 CustomerId = data.CustomerId,
                 CompanyName = companyName,
@@ -108,13 +103,13 @@ namespace Test.DomainModelService
                 Phone = data.Phone,
                 Fax = data.Fax
             };
+
             // Act
-            customerService.Update(customerDomainModel,data);
-            // Act
+            customerDomainService.Update(customerDomainModel);
             var savedChanges = await unitOfWork.SaveChangesAsync();
+
             // Assert
             Assert.Equal(1, savedChanges);
-            // Assert
             Assert.Equal(customerDomainModel.CompanyName, companyName);
         }
     }
