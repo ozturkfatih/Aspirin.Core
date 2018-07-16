@@ -101,7 +101,7 @@ namespace URF.Core.Services.DomainModel
         public virtual void Update(TDomainModel item)
         {
             var entity = Mapper.Map<TDomainModel, TEntity>(item);
-            Repository.Update(entity); ;
+            Repository.Update(entity);
         }
 
         public virtual async Task<bool> DeleteAsync(object[] keyValues, CancellationToken cancellationToken = default)
@@ -113,13 +113,11 @@ namespace URF.Core.Services.DomainModel
         public virtual IQueryable<TDomainModel> Queryable()
             => Repository.Queryable().ProjectTo<TDomainModel>(Mapper.ConfigurationProvider);
 
-        public virtual IQuery<TDomainModel> Query()
-            // TODO: Convert IQuery<TEntity>?
-            => throw new NotImplementedException();
-
         public IQueryable<TDomainModel> QueryableSql(string sql, params object[] parameters)
-            // TODO: Convert IQuery<TEntity>?
-            => throw new NotImplementedException();
+            => Repository.QueryableSql(sql, parameters).ProjectTo<TDomainModel>(Mapper.ConfigurationProvider);
+
+        public virtual IQuery<TDomainModel> Query()
+            => throw new NotSupportedException();
 
         private Expression<Func<TEntity, object>> ConvertPropertyExpression(Expression<Func<TDomainModel, object>> property)
         {

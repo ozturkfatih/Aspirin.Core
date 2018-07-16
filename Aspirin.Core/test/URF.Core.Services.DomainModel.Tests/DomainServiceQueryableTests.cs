@@ -43,9 +43,29 @@ namespace URF.Core.Services.DomainModel.Tests
             const string companyName = "Alfreds Futterkiste";
 
             // Act
-            var query = customerDomainService.Queryable()
-                .Where(x => x.CompanyName.Contains(companyName));
-            var customers = await query.ToListAsync();
+            var query = customerDomainService.Queryable();
+            var customers = await query
+                .Where(x => x.CompanyName.Contains(companyName))
+                .ToListAsync();
+
+            // Assert
+            Assert.Collection(customers, customer
+                => Assert.Equal("ALFKI", customer.CustomerId));
+        }
+
+        [Fact]
+        public async Task QueryableSql_Should_Return_Customer_Query()
+        {
+            // Arrange
+            var customerRepository = new TrackableRepository<Customer>(_fixture.Context);
+            var customerDomainService = new CustomerDomainService(customerRepository, _mapper);
+            const string companyName = "Alfreds Futterkiste";
+
+            // Act
+            var query = customerDomainService.QueryableSql("SELECT * FROM Customers");
+            var customers = await query
+                .Where(x => x.CompanyName.Contains(companyName))
+                .ToListAsync();
 
             // Assert
             Assert.Collection(customers, customer
