@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using TrackableEntities.Common.Core;
 using URF.Core.Abstractions;
 using URF.Core.Abstractions.Services.DomainModel;
@@ -110,8 +111,7 @@ namespace URF.Core.Services.DomainModel
             => await Repository.DeleteAsync(keyValue, cancellationToken);
 
         public virtual IQueryable<TDomainModel> Queryable()
-            // TODO: Convert IQuery<TEntity>?
-            => throw new NotImplementedException();
+            => Repository.Queryable().ProjectTo<TDomainModel>(Mapper.ConfigurationProvider);
 
         public virtual IQuery<TDomainModel> Query()
             // TODO: Convert IQuery<TEntity>?
