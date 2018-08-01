@@ -12,8 +12,8 @@ using URF.Core.Abstractions.Trackable;
 
 namespace URF.Core.Services.DomainModel
 {
-    public abstract class DomainService<TDomainModel, TEntity> : IDomainService<TDomainModel> 
-        where TEntity: class, ITrackable 
+    public abstract class DomainService<TDomainModel, TEntity> : IDomainService<TDomainModel>
+        where TEntity : class, ITrackable
         where TDomainModel : class, ITrackable
     {
         protected IMapper Mapper { get; }
@@ -24,7 +24,6 @@ namespace URF.Core.Services.DomainModel
             Mapper = mapper;
             Repository = repository;
         }
-
         public virtual async Task<TDomainModel> FindAsync(object[] keyValues, CancellationToken cancellationToken = default)
         {
             var entity = await Repository.FindAsync(keyValues, cancellationToken);
@@ -85,11 +84,15 @@ namespace URF.Core.Services.DomainModel
             await Repository.LoadRelatedEntities(entities);
         }
 
-        public virtual async Task<bool> ExistsAsync(object[] keyValues, CancellationToken cancellationToken = default) 
-            => await Repository.ExistsAsync(keyValues, cancellationToken);
+        public virtual async Task<bool> ExistsAsync(object[] keyValues, CancellationToken cancellationToken = default)
+        {
+            return await Repository.ExistsAsync(keyValues, cancellationToken);
+        }
 
         public virtual async Task<bool> ExistsAsync<TKey>(TKey keyValue, CancellationToken cancellationToken = default)
-            => await Repository.ExistsAsync(keyValue, cancellationToken);
+        {
+            return await Repository.ExistsAsync(keyValue, cancellationToken);
+        }
 
         public virtual async Task LoadPropertyAsync(TDomainModel item, Expression<Func<TDomainModel, object>> property, CancellationToken cancellationToken = default)
         {
@@ -105,19 +108,33 @@ namespace URF.Core.Services.DomainModel
         }
 
         public virtual async Task<bool> DeleteAsync(object[] keyValues, CancellationToken cancellationToken = default)
-            => await Repository.DeleteAsync(keyValues, cancellationToken);
+        {
+            return await Repository.DeleteAsync(keyValues, cancellationToken);
+        }
 
         public virtual async Task<bool> DeleteAsync<TKey>(TKey keyValue, CancellationToken cancellationToken = default)
-            => await Repository.DeleteAsync(keyValue, cancellationToken);
-
+        {
+            return await Repository.DeleteAsync(keyValue, cancellationToken);
+        }
+       
         public virtual IQueryable<TDomainModel> Queryable()
-            => Repository.Queryable().ProjectTo<TDomainModel>(Mapper.ConfigurationProvider);
+        {
+            return Repository.Queryable().ProjectTo<TDomainModel>(Mapper.ConfigurationProvider);
+        }
 
         public IQueryable<TDomainModel> QueryableSql(string sql, params object[] parameters)
-            => Repository.QueryableSql(sql, parameters).ProjectTo<TDomainModel>(Mapper.ConfigurationProvider);
-
-        public virtual IQuery<TDomainModel> Query()
-            => throw new NotSupportedException();
+        {
+            return Repository.QueryableSql(sql, parameters).ProjectTo<TDomainModel>(Mapper.ConfigurationProvider);
+        }
+        /// <summary>
+        /// This method don't support for DomainService.
+        /// You can use Queryable method.
+        /// </summary>
+        /// <returns></returns>
+        public IQuery<TDomainModel> Query()
+        {
+            throw new NotImplementedException();
+        }
 
         private Expression<Func<TEntity, object>> ConvertPropertyExpression(Expression<Func<TDomainModel, object>> property)
         {

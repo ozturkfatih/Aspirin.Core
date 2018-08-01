@@ -8,5 +8,6 @@ namespace URF.Core.Services.DomainModel.Tests.Services
     public interface ICustomerDomainService : IDomainService<CustomerDomainModel>
     {
         Task<IEnumerable<CustomerDomainModel>> CustomersByCompany(string companyName);
+        Task<IEnumerable<CustomerDomainModel>> SelectAsyncCustomers();
     }
 }

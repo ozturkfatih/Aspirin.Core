@@ -16,10 +16,16 @@ namespace URF.Core.Services.DomainModel.Tests.Services
 
         public async Task<IEnumerable<CustomerDomainModel>> CustomersByCompany(string companyName)
         {
-           var data = await Repository.Queryable()
+            var data = await Repository.Queryable()
                 .Where(x => x.CompanyName.Contains(companyName))
                 .ToListAsync();
             return Mapper.Map<List<Customer>, List<CustomerDomainModel>>(data);
+        }
+
+        public async Task<IEnumerable<CustomerDomainModel>> SelectAsyncCustomers()
+        {
+            var customers =await Repository.Query().SelectAsync();
+            return Mapper.Map<IEnumerable<Customer>, IEnumerable<CustomerDomainModel>>(customers);
         }
     }
 }

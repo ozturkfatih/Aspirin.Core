@@ -3188,8 +3188,8 @@ namespace URF.Core.Services.DomainModel.Tests.Models
                 new Customer {CustomerId = "WARTH", CompanyName = "Wartian Herkku", ContactName = "Pirkko Koskitalo", ContactTitle = "Accounting Manager", Address = "Torikatu 38", City = "Oulu", Region = "", PostalCode = "90110", Country = "Finland", Phone = "981-443655", Fax = "981-443655"},
                 new Customer {CustomerId = "WELLI", CompanyName = "Wellington Importadora", ContactName = "Paula Parente", ContactTitle = "Sales Manager", Address = "Rua do Mercado, 12", City = "Resende", Region = "SP", PostalCode = "08737-363", Country = "Brazil", Phone = "(14) 555-8122", Fax = ""},
                 new Customer {CustomerId = "WHITC", CompanyName = "White Clover Markets", ContactName = "Karl Jablonski", ContactTitle = "Owner", Address = "305 - 14th Ave. S. Suite 3B", City = "Seattle", Region = "WA", PostalCode = "98128", Country = "USA", Phone = "(206) 555-4112", Fax = "(206) 555-4115"},
-                new Customer {CustomerId = "WILMK", CompanyName = "Wilman Kala", ContactName = "Matti Karttunen", ContactTitle = "Owner/Marketing Assistant", Address = "Keskuskatu 45", City = "Helsinki", Region = "", PostalCode = "21240", Country = "Finland", Phone = "90-224 8858", Fax = "90-224 8858"},
-                new Customer {CustomerId = "WOLZA", CompanyName = "Wolski  Zajazd", ContactName = "Zbyszek Piestrzeniewicz", ContactTitle = "Owner", Address = "ul. Filtrowa 68", City = "Warszawa", Region = "", PostalCode = "01-012", Country = "Poland", Phone = "(26) 642-7012", Fax = "(26) 642-7012"}
+                new Customer {CustomerId = "WILMK", CompanyName = "Wilman Kala", ContactName = "Matti Karttunen", ContactTitle = "Owner/Marketing Assistant", Address = "Keskuskatu 45", City = "Helsinki", Region = "", PostalCode = "21240", Country = "Finland", Phone = "90-224 8858", Fax = "90-224 8858"}
+               
             };
     }
 }
