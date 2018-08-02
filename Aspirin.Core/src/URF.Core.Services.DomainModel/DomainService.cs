@@ -139,9 +139,9 @@ namespace URF.Core.Services.DomainModel
         private Expression<Func<TEntity, object>> ConvertPropertyExpression(Expression<Func<TDomainModel, object>> property)
         {
             var memberName = ((MemberExpression)property.Body).Member.Name;
-            var param = Expression.Parameter(typeof(TDomainModel));
-            var field = Expression.Property(param, memberName);
-            return Expression.Lambda<Func<TEntity, object>>(field, param);
+            var param = Expression.Parameter(typeof(TEntity),"p");
+            var field = Expression.PropertyOrField(param, memberName);
+            return Expression.Lambda<Func<TEntity, object>>(field,param);
         }
     }
 }

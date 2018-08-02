@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +40,12 @@ namespace URF.Core.Services.DomainModel.Tests
             var mapperConfiguration = new MapperConfiguration(config =>
             {
                 config.CreateMap<Product, ProductDomainModel>()
-                    .ForMember(dto => dto.CategoryDomainModel, conf => conf.MapFrom(ol => ol.Category));
+                    .ForMember(dto => dto.Category, conf => conf.MapFrom(ol => ol.Category)).ReverseMap();
+
+                config.CreateMap<Category, CategoryDomainModel>()
+                    .ForMember(dto => dto.Products, conf => conf.MapFrom(ol => ol.Products));
+
+                config.CreateMap<Customer, CustomerDomainModel>().ReverseMap();
             });
             _mapper = mapperConfiguration.CreateMapper();
         }
@@ -189,32 +196,24 @@ namespace URF.Core.Services.DomainModel.Tests
         public async Task LoadPropertyAsync_Should_Load_Property()
         {
             // Arrange
-            var repository = new TrackableRepository<Customer>(_fixture.Context);
-            var customerService = new CustomerDomainService(repository, _mapper);
+            var repository = new TrackableRepository<Product>(_fixture.Context);
+            var productService = new ProductDomainService(repository, _mapper);
 
-            var customerDomainModel = new CustomerDomainModel
+            var productDomainModel = new ProductDomainModel
             {
-                CustomerId = "WOLZA",
-                CompanyName = "Wolski  Zajazd",
-                ContactName = "Zbyszek Piestrzeniewicz",
-                ContactTitle = "Owner",
-                Address = "ul. Filtrowa 68",
-                City = "Warszawa",
-                Region = "",
-                PostalCode = "01-012",
-                Country = "Poland",
-                Phone = "(26) 642-7012",
-                Fax = "(26) 642-7012"
+                ProductId = 80,
+                ProductName = "Product 80",
+                UnitPrice = 40,
+                CategoryId = 1,
             };
-
-            customerService.Attach(customerDomainModel);
-
             // Act
-            await customerService.LoadPropertyAsync(customerDomainModel, p => p.City);
+            productService.Attach(productDomainModel);
+            await productService.LoadPropertyAsync(productDomainModel, p => p.Category);
 
             // Assert
-            Assert.Same(customerDomainModel.City, _customers.Where(c => c.CustomerId == "WOLZA").Select(c => c.City));
+            Assert.Same(productDomainModel.Category, _categories[0]);
         }
+
         [Fact]
         public async Task SelectAsync_Should_Return_DomainModels()
         {
@@ -246,7 +245,7 @@ namespace URF.Core.Services.DomainModel.Tests
             var query = productDomainService.Queryable();
 
             var products = await query
-                .Include(p => p.CategoryDomainModel)
+                .Include(p => p.Category)
                 .Take(2)
                 .Where(p => p.UnitPrice > 15)
                 .Select(p => new MyProduct
@@ -254,7 +253,7 @@ namespace URF.Core.Services.DomainModel.Tests
                     Id = p.ProductId,
                     Name = p.ProductName,
                     Price = p.UnitPrice,
-                    Category = p.CategoryDomainModel.CategoryName
+                    Category = p.Category.CategoryName
                 })
                 .ToListAsync();
 
