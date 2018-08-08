@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -190,28 +188,6 @@ namespace URF.Core.Services.DomainModel.Tests
 
             // Assert
             Assert.False(result);
-        }
-
-        [Fact]
-        public async Task LoadPropertyAsync_Should_Load_Property()
-        {
-            // Arrange
-            var repository = new TrackableRepository<Product>(_fixture.Context);
-            var productService = new ProductDomainService(repository, _mapper);
-
-            var productDomainModel = new ProductDomainModel
-            {
-                ProductId = 80,
-                ProductName = "Product 80",
-                UnitPrice = 40,
-                CategoryId = 1,
-            };
-            // Act
-            productService.Attach(productDomainModel);
-            await productService.LoadPropertyAsync(productDomainModel, p => p.Category);
-
-            // Assert
-            Assert.Same(productDomainModel.Category, _categories[0]);
         }
 
         [Fact]
